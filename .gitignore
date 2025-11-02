@@ -12,8 +12,8 @@ replay_pid*
 out/
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+!core/server/src/main/**/target/
+!core/server/src/test/**/target/
 
 ### IntelliJ IDEA ###
 .idea

@@ -1,0 +1,105 @@
+server:
+  port: 8080
+
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: admin_category
+          uri: lb://server
+          predicates:
+            - Path=/admin/categories,/admin/categories/**
+
+        - id: public_category
+          uri: lb://server
+          predicates:
+            - Path=/categories,/categories/**
+
+        - id: admin_comment_search
+          uri: lb://server
+          predicates:
+            - Path=/admin/comments/search
+
+        - id: admin_comment_approve
+          uri: lb://server
+          predicates:
+            - Path=/admin/comments/*/approve
+
+        - id: admin_comment_reject
+          uri: lb://server
+          predicates:
+            - Path=/admin/comments/*/reject
+
+        - id: admin_comment_operations
+          uri: lb://server
+          predicates:
+            - Path=/admin/comments,/admin/comments/**
+
+        - id: admin_user_comments
+          uri: lb://server
+          predicates:
+            - Path=/admin/users/*/comments
+
+        - id: private_comment_create
+          uri: lb://server
+          predicates:
+            - Path=/users/*/events/*/comments
+
+        - id: private_comment_operations
+          uri: lb://server
+          predicates:
+            - Path=/users/*/comments,/users/*/comments/**
+
+        - id: public_comment_single
+          uri: lb://server
+          predicates:
+            - Path=/comments/*
+
+        - id: public_comment_event
+          uri: lb://server
+          predicates:
+            - Path=/events/*/comments,/events/*/comments/**
+
+        - id: admin_compilation
+          uri: lb://server
+          predicates:
+            - Path=/admin/compilations,/admin/compilations/**
+
+        - id: public_compilation
+          uri: lb://server
+          predicates:
+            - Path=/compilations,/compilations/**
+
+        - id: admin_event
+          uri: lb://server
+          predicates:
+            - Path=/admin/events,/admin/events/**
+
+        - id: private_event
+          uri: lb://server
+          predicates:
+            - Path=/users/*/events,/users/*/events/**
+
+        - id: public_event
+          uri: lb://server
+          predicates:
+            - Path=/events,/events/**
+
+        - id: user_requests
+          uri: lb://server
+          predicates:
+            - Path=/users/*/requests,/users/*/requests/**
+
+        - id: event_requests
+          uri: lb://server
+          predicates:
+            - Path=/users/*/events/*/requests
+
+        - id: admin_users
+          uri: lb://server
+          predicates:
+            - Path=/admin/users,/admin/users/**
