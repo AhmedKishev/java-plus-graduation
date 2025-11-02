@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>stats-server</artifactId>
+    <artifactId>stats</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -23,7 +23,7 @@
     <modules>
         <module>stat-common</module>
         <module>stat-client</module>
-        <module>stat-server</module>
+        <module>stats-server</module>
     </modules>
 
 </project>
