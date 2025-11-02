@@ -17,6 +17,12 @@ spring:
         max-interval: 6000
         max-attempts: 3
 
+explore-with-me:
+  datetime:
+    format: "yyyy-MM-dd HH:mm:ss"
+
+
+
 eureka:
   client:
     service-url:
