@@ -7,8 +7,6 @@ spring:
   config:
     import: 'configserver:'
   cloud:
-    openfeign:
-      lazy-attributes-resolution: true
     config:
       discovery:
         enabled: true
