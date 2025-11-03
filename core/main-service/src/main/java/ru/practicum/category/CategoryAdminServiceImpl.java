@@ -51,7 +51,7 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     public CategoryDto updateCategory(Long catId, CategoryDto categoryDto) {
         log.info("updateCategories - invoked");
         Category category = categoryRepository.findById(catId).orElseThrow(()
-                -> new NotFoundException("This Category not found"));
+                -> new NotFoundException(String.format("Category with id %d not found", catId)));
         if (!category.getName().equals(categoryDto.getName()) &&
                 categoryRepository.existsByName(categoryDto.getName())) {
             log.error("Category with this name not unique: {}", categoryDto.getName());
