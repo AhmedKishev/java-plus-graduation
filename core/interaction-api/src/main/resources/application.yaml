@@ -1,0 +1,9 @@
+explore-with-me:
+  datetime:
+    format: "yyyy-MM-dd HH:mm:ss"
+  main:
+    datetime:
+      format: "yyyy-MM-dd HH:mm:ss"
+  stat:
+    datetime:
+      format: "yyyy-MM-dd HH:mm:ss"
