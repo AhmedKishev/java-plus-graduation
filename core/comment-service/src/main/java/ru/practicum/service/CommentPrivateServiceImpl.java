@@ -38,7 +38,7 @@ public class CommentPrivateServiceImpl implements CommentPrivateService {
         EventFullDto event = eventClient.findById(eventId);
         if (!event.getState().equals(State.PUBLISHED)) {
             log.error("Event state = {} - should be PUBLISHED", event.getState());
-            throw new ConflictException("Event not published you cant comment it");
+            throw new ConflictException(String.format("Event with id %d not published you cant comment it", eventId));
         }
         comment.setAuthorId(author.getId());
         comment.setEventId(event.getId());
@@ -58,11 +58,11 @@ public class CommentPrivateServiceImpl implements CommentPrivateService {
         Comment comment = repository.findById(comId)
                 .orElseThrow(() -> {
                     log.error("Comment with id = {} - not exist", comId);
-                    return new NotFoundException("Comment not found");
+                    return new NotFoundException(String.format("Comment with id %d not found", comId));
                 });
         if (!comment.getAuthorId().equals(userId)) {
             log.error("Unauthorized access by user");
-            throw new ConflictException("you didn't write this comment and can't delete it");
+            throw new ConflictException(String.format("you didn't write comment with id %d and can't delete it", comId));
         }
         log.info("Result: comment with id = {} - deleted", comId);
         repository.deleteById(comId);
@@ -74,11 +74,11 @@ public class CommentPrivateServiceImpl implements CommentPrivateService {
         Comment comment = repository.findById(comId)
                 .orElseThrow(() -> {
                     log.error("Comment with id = {} - not exist", comId);
-                    return new NotFoundException("Comment not found");
+                    return new NotFoundException(String.format("Comment with id %d not found", comId));
                 });
         if (!comment.getAuthorId().equals(userId)) {
             log.error("Unauthorized access by user");
-            throw new ConflictException("you didn't write this comment and can't patch it");
+            throw new ConflictException(String.format("you didn't write comment with id %d and can't patch it", comId));
         }
         comment.setText(commentCreateDto.getText());
         comment.setPatchTime(LocalDateTime.now().withNano(0));

@@ -40,7 +40,7 @@ public class CommentAdminServiceImpl implements CommentAdminService {
         log.info("admin delete - invoked");
         if (!repository.existsById(comId)) {
             log.error("User with id = {} not exist", comId);
-            throw new NotFoundException("Comment not found");
+            throw new NotFoundException(String.format("Comment with id %d not found", comId));
         }
         log.info("Result: comment with id = {} deleted", comId);
         repository.deleteById(comId);
@@ -95,7 +95,7 @@ public class CommentAdminServiceImpl implements CommentAdminService {
     public CommentDto approveComment(Long comId) {
         log.info("approveComment - invoked");
         Comment comment = repository.findById(comId)
-                .orElseThrow(() -> new NotFoundException("Comment not found"));
+                .orElseThrow(() -> new NotFoundException(String.format("Comment with id %d not found", comId)));
         comment.setApproved(true);
         repository.save(comment);
         log.info("Result: comment with id = {} approved", comId);
@@ -109,7 +109,7 @@ public class CommentAdminServiceImpl implements CommentAdminService {
     @Override
     public CommentDto rejectComment(Long comId) {
         log.info("rejectComment - invoked");
-        Comment comment = repository.findById(comId).orElseThrow(() -> new NotFoundException("Comment not found"));
+        Comment comment = repository.findById(comId).orElseThrow(() -> new NotFoundException(String.format("Comment with id %d not found", comId)));
         comment.setApproved(false);
         repository.save(comment);
         log.info("Result: comment with id = {} rejected", comId);

@@ -43,11 +43,11 @@ public class CommentPublicServiceImpl implements CommentPublicService {
         Comment comment = repository.findById(comId)
                 .orElseThrow(() -> {
                     log.error("Comment with id = {} - not exist", comId);
-                    return new NotFoundException("Comment not found");
+                    return new NotFoundException(String.format("Comment with id %d not found", comId));
                 });
         if (!comment.isApproved()) {
             log.warn("Comment with id = {} is not approved", comId);
-            throw new ForbiddenException("Comment is not approved");
+            throw new ForbiddenException(String.format("Comment with id %d is not approved", comment.getId()));
         }
         log.info("Result: comment with id= {}", comId);
 
