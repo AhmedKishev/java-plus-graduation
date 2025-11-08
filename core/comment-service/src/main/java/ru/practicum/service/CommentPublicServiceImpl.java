@@ -89,11 +89,11 @@ public class CommentPublicServiceImpl implements CommentPublicService {
                 });
         if (!comment.getEventId().equals(eventId)) {
             log.error("Comment with id = {} does not belong to event with id = {}", commentId, eventId);
-            throw new NotFoundException("Comment not found for the specified event");
+            throw new NotFoundException(String.format("Comment with id %d not found for the specified event", comment.getId()));
         }
         if (!comment.isApproved()) {
             log.warn("Comment with id = {} is not approved", commentId);
-            throw new ForbiddenException("Comment is not approved");
+            throw new ForbiddenException(String.format("Comment with id %d is not approved", comment.getId()));
         }
         log.info("Result: comment with eventId= {} and commentId= {}", eventId, commentId);
 
