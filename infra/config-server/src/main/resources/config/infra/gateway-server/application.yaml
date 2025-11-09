@@ -17,97 +17,119 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: admin_category
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/admin/categories,/admin/categories/**
-
-        - id: public_category
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/categories,/categories/**
-
-        - id: admin_comment_search
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/admin/comments/search
-
-        - id: admin_comment_approve
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/admin/comments/*/approve
-
-        - id: admin_comment_reject
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/admin/comments/*/reject
-
-        - id: admin_comment_operations
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/admin/comments,/admin/comments/**
-
-        - id: admin_user_comments
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/admin/users/*/comments
-
-        - id: private_comment_create
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/users/*/events/*/comments
-
-        - id: private_comment_operations
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/users/*/comments,/users/*/comments/**
-
-        - id: public_comment_single
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/comments/*
-
-        - id: public_comment_event
-          uri: lb://MAIN-SERVICE
-          predicates:
-            - Path=/events/*/comments,/events/*/comments/**
-
-        - id: admin_compilation
-          uri: lb://MAIN-SERVICE
+          #compillations
+        - id: admin_compilations
+          uri: lb://EVENT-SERVICE
           predicates:
             - Path=/admin/compilations,/admin/compilations/**
 
-        - id: public_compilation
-          uri: lb://MAIN-SERVICE
+        - id: public_compilations
+          uri: lb://EVENT-SERVICE
           predicates:
             - Path=/compilations,/compilations/**
+          #requests
+        - id: user_requests_operations
+          uri: lb://REQUEST-SERVICE
+          predicates:
+            - Path=/users/*/requests,/users/*/requests/**
 
+        - id: event_requests_operations
+          uri: lb://REQUEST-SERVICE
+          predicates:
+            - Path=/users/*/events/*/requests,/users/*/events/*/requests/**
+
+        - id: admin_confirmed_single
+          uri: lb://REQUEST-SERVICE
+          predicates:
+            - Path=/admin/confirmed/{eventId}
+
+        - id: admin_confirmed_multiple
+          uri: lb://REQUEST-SERVICE
+          predicates:
+            - Path=/admin/confirmed
+
+          #events
         - id: admin_event
-          uri: lb://MAIN-SERVICE
+          uri: lb://EVENT-SERVICE
           predicates:
             - Path=/admin/events,/admin/events/**
 
         - id: private_event
-          uri: lb://MAIN-SERVICE
+          uri: lb://EVENT-SERVICE
           predicates:
             - Path=/users/*/events,/users/*/events/**
 
         - id: public_event
-          uri: lb://MAIN-SERVICE
+          uri: lb://EVENT-SERVICE
           predicates:
             - Path=/events,/events/**
-
-        - id: user_requests
-          uri: lb://MAIN-SERVICE
+        
+        #categories
+        - id: admin_category
+          uri: lb://EVENT-SERVICE
           predicates:
-            - Path=/users/*/requests,/users/*/requests/**
+            - Path=/admin/categories,/admin/categories/**
 
-        - id: event_requests
-          uri: lb://MAIN-SERVICE
+        - id: public_category
+          uri: lb://EVENT-SERVICE
           predicates:
-            - Path=/users/*/events/*/requests
+            - Path=/categories,/categories/**
 
-        - id: admin_users
-          uri: lb://MAIN-SERVICE
+        #user
+        - id: admin_users_operations
+          uri: lb://USER-SERVICE
           predicates:
             - Path=/admin/users,/admin/users/**
+
+        #comments
+
+
+        - id: admin_comment_search
+          uri: lb://COMMENT-SERVICE
+          predicates:
+            - Path=/admin/comments/search
+
+        - id: admin_comment_approve
+          uri: lb://COMMENTS-SERVICE
+          predicates:
+            - Path=/admin/comments/*/approve
+
+        - id: admin_comment_reject
+          uri: lb://COMMENTS-SERVICE
+          predicates:
+            - Path=/admin/comments/*/reject
+
+        - id: admin_comment_operations
+          uri: lb://COMMENTS-SERVICE
+          predicates:
+            - Path=/admin/comments,/admin/comments/**
+
+        - id: admin_user_comments
+          uri: lb://COMMENTS-SERVICE
+          predicates:
+            - Path=/admin/users/*/comments
+
+        - id: private_comment_create
+          uri: lb://COMMENTS-SERVICE
+          predicates:
+            - Path=/users/*/events/*/comments
+
+        - id: private_comment_operations
+          uri: lb://COMMENTS-SERVICE
+          predicates:
+            - Path=/users/*/comments,/users/*/comments/**
+
+        - id: public_comment_single
+          uri: lb://COMMENTS-SERVICE
+          predicates:
+            - Path=/comments/*
+
+        - id: public_comment_event
+          uri: lb://COMMENTS-SERVICE
+          predicates:
+            - Path=/events/*/comments,/events/*/comments/**
+
+
+
+
+
