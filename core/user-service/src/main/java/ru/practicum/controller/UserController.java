@@ -2,6 +2,7 @@ package ru.practicum.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -71,5 +72,7 @@ public class UserController {
     public Map<Long, UserShortDto> findAllByIdsShort(@RequestParam List<Long> ids) {
         return userService.findAllByIdsShort(ids);
     }
+
+
 
 }

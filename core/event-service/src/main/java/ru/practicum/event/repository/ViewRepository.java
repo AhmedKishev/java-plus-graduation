@@ -21,6 +21,6 @@ public interface ViewRepository extends JpaRepository<View, Long> {
             @Param("eventIds") List<Long> eventIds
     );
 
-    boolean existsByEventIdAndIp(Long eventId, String ip);
+    boolean existsByEventIdAndUserId(Long eventId, Long userId);
 
 }

@@ -59,10 +59,16 @@ public class EventPublicController {
     @GetMapping("/{id}")
     EventFullDto getInformationAboutEventByEventId(
             @PathVariable @Positive Long id,
-            HttpServletRequest request
+            @RequestHeader("X-EWM-USER-ID") long userId
     ) {
         log.info("Calling to endpoint /events/{id} GetMapping for eventId: " + id);
-        return eventPublicService.getEventById(id, request);
+        return eventPublicService.getEventById(id, userId);
+    }
+
+    @GetMapping("/recommendations")
+    List<EventShortDto> getEventsRecommendations(@RequestHeader("X-EWM-USER-ID") long userId,
+                                                 @RequestParam(defaultValue = "10") int maxResults) {
+        return eventPublicService.getEventsRecommendations(userId, maxResults);
     }
 
 }

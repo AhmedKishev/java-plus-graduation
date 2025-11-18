@@ -1,0 +1,10 @@
+topic:
+    user-action: stats.user-actions.v1
+
+
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: ru.practicum.serializer.GeneralAvroSerializer

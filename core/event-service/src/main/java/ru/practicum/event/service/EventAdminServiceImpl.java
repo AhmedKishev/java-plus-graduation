@@ -64,7 +64,7 @@ public class EventAdminServiceImpl implements EventAdminService {
                 ));
 
         return events.stream()
-                .map(e -> EventMapper.toEventFullDto(e, userClient.findByIdShort(e.getInitiatorId()), confirmedRequestsMap.get(e.getId()), viewsMap.get(e.getId())))
+                .map(e -> EventMapper.toEventFullDto(e, userClient.findByIdShort(e.getInitiatorId()), confirmedRequestsMap.get(e.getId()), 0d))
                 .toList();
     }
 
@@ -115,7 +115,7 @@ public class EventAdminServiceImpl implements EventAdminService {
         eventRepository.save(event);
         Long confirmedRequests = requestClient.countByEventIdAndStatus(eventId);
         Long views = viewRepository.countByEventId(eventId);
-        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, views);
+        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class EventAdminServiceImpl implements EventAdminService {
 
         Long views = viewRepository.countByEventId(event.getId());
 
-        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, views);
+        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class EventAdminServiceImpl implements EventAdminService {
 
         Long views = viewRepository.countByEventId(event.getId());
 
-        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, views);
+        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
 
 }

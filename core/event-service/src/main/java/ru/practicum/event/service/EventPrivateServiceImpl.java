@@ -51,7 +51,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
 
         Event newEvent = EventMapper.toEvent(newEventDto, initiator.getId(), category);
         eventRepository.save(newEvent);
-        return EventMapper.toEventFullDto(newEvent, userClient.findByIdShort(newEvent.getInitiatorId()), 0L, 0L);
+        return EventMapper.toEventFullDto(newEvent, userClient.findByIdShort(newEvent.getInitiatorId()), 0L, 0d);
     }
 
     // Получение полной информации о событии добавленном текущим пользователем
@@ -67,7 +67,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
 
         Long confirmedRequests = requestClient.countByEventIdAndStatus(event.getId());
         Long views = viewRepository.countByEventId(eventId);
-        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, views);
+        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
 
     // Получение событий, добавленных текущим пользователем
@@ -92,7 +92,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
                 ));
 
         return events.stream()
-                .map(e -> EventMapper.toEventShortDto(e, userClient.findByIdShort(e.getInitiatorId()), confirmedRequestsMap.get(e.getId()), viewsMap.get(e.getId())))
+                .map(e -> EventMapper.toEventShortDto(e, 0d, userClient.findById(e.getInitiatorId())))
                 .toList();
     }
 
@@ -146,7 +146,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         eventRepository.save(event);
         Long confirmedRequests = requestClient.countByEventIdAndStatus(eventId);
         Long views = viewRepository.countByEventId(eventId);
-        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, views);
+        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
 
 

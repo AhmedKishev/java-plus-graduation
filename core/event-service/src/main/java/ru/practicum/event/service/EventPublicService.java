@@ -11,6 +11,7 @@ public interface EventPublicService {
 
     List<EventShortDto> getAllEventsByParams(EventParams eventParams, HttpServletRequest request);
 
-    EventFullDto getEventById(Long id, HttpServletRequest request);
+    EventFullDto getEventById(Long id, long request);
 
+    List<EventShortDto> getEventsRecommendations(long userId, int maxResults);
 }
