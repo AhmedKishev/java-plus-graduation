@@ -74,7 +74,7 @@ public class RequestController {
 
 
     @GetMapping("admin/confirmed/{eventId}")
-    public Long countByEventIdAndStatus(@PathVariable Long eventId) {
+    public Long countByEventIdAndStatus(@PathVariable @Positive Long eventId) {
         return requestService.countByEventIdAndStatus(eventId);
     }
 
@@ -83,4 +83,6 @@ public class RequestController {
     public Map<Long, Long> getConfirmedRequestsByEventIds(@RequestParam List<Long> ids) {
         return requestService.getConfrimedRequestsByEventIds(ids);
     }
+
+
 }

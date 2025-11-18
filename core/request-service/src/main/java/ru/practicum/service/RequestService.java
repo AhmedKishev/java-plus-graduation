@@ -1,5 +1,6 @@
 package ru.practicum.service;
 
+import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -12,6 +13,9 @@ import ru.practicum.dto.EventRequestStatusUpdateResultDto;
 import ru.practicum.dto.UserDto;
 import ru.practicum.enums.ParticipationRequestStatus;
 import ru.practicum.enums.State;
+import ru.practicum.ewm.UserActionClient;
+import ru.practicum.ewm.grpc.stats.event.ActionTypeProto;
+import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.RequestMapper;
@@ -20,6 +24,7 @@ import ru.practicum.repository.RequestRepository;
 import ru.practicum.request.EventRequestStatusUpdateRequestDto;
 import ru.practicum.request.ParticipationRequestDto;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +39,7 @@ public class RequestService {
 
     UserClient userClient;
     EventClient eventClient;
+    UserActionClient userActionClient;
     // ЗАЯВКИ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
 
     // Добавление запроса от текущего пользователя на участие в событии
@@ -78,6 +84,7 @@ public class RequestService {
         if (newRequestStatus == ParticipationRequestStatus.CONFIRMED) {
             eventClient.incrementConfirmedCountByEventId(eventId);
         }
+        userActionClient.collectUserAction(eventId, userId, ActionTypeProto.ACTION_REGISTER, Instant.now());
 
         requestRepository.save(newRequest);
         return RequestMapper.toDto(newRequest);
@@ -214,5 +221,14 @@ public class RequestService {
                         r -> (Long) r[0],
                         r -> (Long) r[1]
                 ));
+    }
+
+    public void registrationUserInEvent(@Positive Long userId, Long eventId) {
+
+        if (!requestRepository.existsByRequesterIdAndEventId(userId, eventId)) {
+            throw new BadRequestException(String.format("User with id: %d not requester for event with id: %d", userId, eventId));
+        }
+
+        userActionClient.collectUserAction(userId, eventId, ActionTypeProto.ACTION_REGISTER, Instant.now());
     }
 }

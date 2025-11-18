@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 @Transactional(readOnly = true)
 public class EventPublicServiceImpl implements EventPublicService {
 
@@ -68,18 +70,6 @@ public class EventPublicServiceImpl implements EventPublicService {
                 params.getSize().intValue(), sort);
 
         Page<Event> events = eventRepository.findAll(JpaSpecifications.publicFilters(params), pageRequest);
-        List<Long> eventIds = events.stream().map(Event::getId).toList();
-
-        // информация о каждом событии должна включать в себя количество просмотров и количество уже одобренных заявок на участие
-        Map<Long, Long> confirmedRequestsMap = requestClient.getConfirmedRequestsByEventIds(eventIds);
-        Map<Long, Long> viewsMap = viewRepository.countsByEventIds(eventIds)
-                .stream()
-                .collect(Collectors.toMap(
-                        r -> (Long) r[0],
-                        r -> (Long) r[1]
-                ));
-
-        // информацию о том, что по этому эндпоинту был осуществлен и обработан запрос, нужно сохранить в сервисе статистики
 
 
         return events.stream()
@@ -97,7 +87,7 @@ public class EventPublicServiceImpl implements EventPublicService {
 
         // информация о событии должна включать в себя количество просмотров и количество подтвержденных запросов
         Long confirmedRequests = requestClient.countByEventIdAndStatus(eventId);
-        Long views = viewRepository.countByEventId(eventId);
+
 
         // делаем новый уникальный просмотр
         if (!viewRepository.existsByEventIdAndUserId(eventId, userId)) {
@@ -108,7 +98,9 @@ public class EventPublicServiceImpl implements EventPublicService {
             viewRepository.save(view);
         }
 
+
         userActionClient.collectUserAction(eventId, userId, ActionTypeProto.ACTION_VIEW, Instant.now());
+
 
         return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
@@ -131,4 +123,15 @@ public class EventPublicServiceImpl implements EventPublicService {
                         initiators.get(event.getInitiatorId())))
                 .toList();
     }
+
+    @Override
+    public void putLikeForEvent(long userId, Long eventId) {
+
+        if (!viewRepository.existsByEventIdAndUserId(eventId, userId)) {
+            throw new BadRequestException(String.format("User with userId: %d not visited event with id: %d", userId, eventId));
+        }
+
+        userActionClient.collectUserAction(eventId, userId, ActionTypeProto.ACTION_LIKE, Instant.now());
+    }
+
 }

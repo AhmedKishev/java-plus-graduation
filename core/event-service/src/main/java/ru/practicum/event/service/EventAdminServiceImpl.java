@@ -56,12 +56,6 @@ public class EventAdminServiceImpl implements EventAdminService {
 
         List<Long> eventIds = events.stream().map(Event::getId).toList();
         Map<Long, Long> confirmedRequestsMap = requestClient.getConfirmedRequestsByEventIds(eventIds);
-        Map<Long, Long> viewsMap = viewRepository.countsByEventIds(eventIds)
-                .stream()
-                .collect(Collectors.toMap(
-                        r -> (Long) r[0],
-                        r -> (Long) r[1]
-                ));
 
         return events.stream()
                 .map(e -> EventMapper.toEventFullDto(e, userClient.findByIdShort(e.getInitiatorId()), confirmedRequestsMap.get(e.getId()), 0d))
@@ -114,7 +108,6 @@ public class EventAdminServiceImpl implements EventAdminService {
 
         eventRepository.save(event);
         Long confirmedRequests = requestClient.countByEventIdAndStatus(eventId);
-        Long views = viewRepository.countByEventId(eventId);
         return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
 
@@ -127,8 +120,6 @@ public class EventAdminServiceImpl implements EventAdminService {
             throw new NotFoundException("Посмотреть можно только опубликованное событие.");
 
         Long confirmedRequests = requestClient.countByEventIdAndStatus(event.getId());
-
-        Long views = viewRepository.countByEventId(event.getId());
 
         return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
@@ -197,7 +188,6 @@ public class EventAdminServiceImpl implements EventAdminService {
 
         Long confirmedRequests = requestClient.countByEventIdAndStatus(event.getId());
 
-        Long views = viewRepository.countByEventId(event.getId());
 
         return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
