@@ -84,18 +84,18 @@ public class RecommendationServiceImpl implements RecommendationService {
                 PageRequest.of(0, request.getMaxResults(), Sort.by(Sort.Direction.DESC, "score")));
 
         List<RecommendedEventProto> recommendations = new ArrayList<>(eventSimilaritiesA.stream()
-                .filter(es -> !userActionRepository.existsByEventIdAndUserId(es.getEventB(), userId))
-                .map(es -> RecommendedEventProto.newBuilder()
-                        .setEventId(es.getEventB())
-                        .setScore(es.getScore())
+                .filter(eventSimilarity -> !userActionRepository.existsByEventIdAndUserId(eventSimilarity.getEventB(), userId))
+                .map(eventSimilarity -> RecommendedEventProto.newBuilder()
+                        .setEventId(eventSimilarity.getEventB())
+                        .setScore(eventSimilarity.getScore())
                         .build())
                 .toList());
 
         List<RecommendedEventProto> recommendationsB = eventSimilaritiesB.stream()
-                .filter(es -> !userActionRepository.existsByEventIdAndUserId(es.getEventA(), userId))
-                .map(es -> RecommendedEventProto.newBuilder()
-                        .setEventId(es.getEventA())
-                        .setScore(es.getScore())
+                .filter(eventSimilarity -> !userActionRepository.existsByEventIdAndUserId(eventSimilarity.getEventA(), userId))
+                .map(eventSimilarity -> RecommendedEventProto.newBuilder()
+                        .setEventId(eventSimilarity.getEventA())
+                        .setScore(eventSimilarity.getScore())
                         .build())
                 .toList();
 
@@ -126,11 +126,11 @@ public class RecommendationServiceImpl implements RecommendationService {
                 PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "score")));
 
         Map<Long, Double> viewedEventScores = eventSimilaritiesA.stream()
-                .filter(es -> userActionRepository.existsByEventIdAndUserId(es.getEventB(), userId))
+                .filter(eventSimilarity -> userActionRepository.existsByEventIdAndUserId(eventSimilarity.getEventB(), userId))
                 .collect(Collectors.toMap(EventSimilarity::getEventB, EventSimilarity::getScore));
 
         Map<Long, Double> viewedEventScoresB = eventSimilaritiesB.stream()
-                .filter(es -> userActionRepository.existsByEventIdAndUserId(es.getEventA(), userId))
+                .filter(eventSimilarity -> userActionRepository.existsByEventIdAndUserId(eventSimilarity.getEventA(), userId))
                 .collect(Collectors.toMap(EventSimilarity::getEventA, EventSimilarity::getScore));
 
         viewedEventScores.putAll(viewedEventScoresB);

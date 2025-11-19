@@ -26,6 +26,9 @@ public class EventPublicController {
 
     EventPublicService eventPublicService;
 
+    private final String DATE_TIME_FORMATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+    private final String X_EWM_USER_ID_HEADER = "X-EWM-USER-ID";
 
     // Получение событий с возможностью фильтрации
     @GetMapping
@@ -34,9 +37,9 @@ public class EventPublicController {
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) Boolean paid,
             @RequestParam(required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+            @DateTimeFormat(pattern = DATE_TIME_FORMATE_PATTERN) LocalDateTime rangeStart,
             @RequestParam(required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+            @DateTimeFormat(pattern = DATE_TIME_FORMATE_PATTERN) LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "false") Boolean onlyAvailable,
             @RequestParam(defaultValue = "EVENT_DATE") EventSort eventSort,
             @RequestParam(defaultValue = "0") Long from,
@@ -61,20 +64,20 @@ public class EventPublicController {
     @GetMapping("/{id}")
     EventFullDto getInformationAboutEventByEventId(
             @PathVariable @Positive Long id,
-            @RequestHeader("X-EWM-USER-ID") long userId
+            @RequestHeader(X_EWM_USER_ID_HEADER) long userId
     ) {
         log.info("Calling to endpoint /events/{id} GetMapping for eventId: " + id);
         return eventPublicService.getEventById(id, userId);
     }
 
     @GetMapping("/recommendations")
-    List<EventShortDto> getEventsRecommendations(@RequestHeader("X-EWM-USER-ID") long userId,
+    List<EventShortDto> getEventsRecommendations(@RequestHeader(X_EWM_USER_ID_HEADER) long userId,
                                                  @RequestParam(defaultValue = "10") int maxResults) {
         return eventPublicService.getEventsRecommendations(userId, maxResults);
     }
 
     @PutMapping("/{eventId}/like")
-    public void putLikeForEvent(@RequestHeader("X-EWM-USER-ID") long userId,
+    public void putLikeForEvent(@RequestHeader(X_EWM_USER_ID_HEADER) long userId,
                                 @PathVariable @Positive Long eventId) {
         eventPublicService.putLikeForEvent(userId, eventId);
     }

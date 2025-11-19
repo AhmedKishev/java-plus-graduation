@@ -34,6 +34,8 @@ public class EventAdminController {
 
     EventAdminService eventAdminService;
 
+    private final String DATE_TIME_FORMATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
     // Поиск событий
     @GetMapping
     Collection<EventFullDto> getAllEventsByParams(
@@ -41,9 +43,9 @@ public class EventAdminController {
             @RequestParam(required = false) List<State> states,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+            @DateTimeFormat(pattern = DATE_TIME_FORMATE_PATTERN) LocalDateTime rangeStart,
             @RequestParam(required = false)
-            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+            @DateTimeFormat(pattern = DATE_TIME_FORMATE_PATTERN) LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "0") @PositiveOrZero Long from,
             @RequestParam(defaultValue = "10") @Positive Long size
     ) {
