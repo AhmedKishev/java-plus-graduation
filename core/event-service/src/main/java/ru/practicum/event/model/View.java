@@ -21,7 +21,7 @@ public class View {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Column(name = "ip", length = 15, nullable = false)
-    String ip;
+    @Column(name = "user_id")
+    Long userId;
 
 }

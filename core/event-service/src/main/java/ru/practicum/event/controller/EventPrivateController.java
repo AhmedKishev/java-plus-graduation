@@ -31,9 +31,9 @@ public class EventPrivateController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     EventFullDto addNewEventByUser(
-            @PathVariable @Positive Long userId,
-            @Valid @RequestBody NewEventDto newEventDto
-    ) {
+                    @PathVariable @Positive Long userId,
+                    @Valid @RequestBody NewEventDto newEventDto
+            ) {
         log.info("Calling to endpoint /users/{userId}/events PostMapping for userId: " + userId);
         return eventPrivateService.addEvent(userId, newEventDto);
     }

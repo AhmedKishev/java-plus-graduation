@@ -40,7 +40,7 @@ public class EventFullDto {
     LocalDateTime createdOn;
 
     Long confirmedRequests;
-    Long views;
+    Double rating;
 
     List<CommentShortDto> comments;
 

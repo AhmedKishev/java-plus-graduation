@@ -101,4 +101,18 @@ public class UserService {
                         UserMapper::toUserShortDto
                 ));
     }
+
+    public List<UserDto> getAllUsers(List<Long> ids, Integer from, Integer size) {
+        PageRequest pageRequest = PageRequest.of(from / size, size);
+
+        if (ids.isEmpty()) {
+            return userRepository.findAll(pageRequest).getContent().stream()
+                    .map(UserMapper::toDto)
+                    .toList();
+        } else {
+            return userRepository.findAllByIdIn(ids, pageRequest).getContent().stream()
+                    .map(UserMapper::toDto)
+                    .toList();
+        }
+    }
 }
