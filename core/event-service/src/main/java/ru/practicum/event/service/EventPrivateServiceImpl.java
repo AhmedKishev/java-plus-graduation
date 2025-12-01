@@ -51,7 +51,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
 
         Event newEvent = EventMapper.toEvent(newEventDto, initiator.getId(), category);
         eventRepository.save(newEvent);
-        return EventMapper.toEventFullDto(newEvent, userClient.findByIdShort(newEvent.getInitiatorId()), 0L, 0L);
+        return EventMapper.toEventFullDto(newEvent, userClient.findByIdShort(newEvent.getInitiatorId()), 0L, 0d);
     }
 
     // Получение полной информации о событии добавленном текущим пользователем
@@ -66,8 +66,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         }
 
         Long confirmedRequests = requestClient.countByEventIdAndStatus(event.getId());
-        Long views = viewRepository.countByEventId(eventId);
-        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, views);
+        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
 
     // Получение событий, добавленных текущим пользователем
@@ -82,17 +81,9 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         );
 
         List<Event> events = eventRepository.findByInitiatorId(userId, pageable);
-        List<Long> eventIds = events.stream().map(Event::getId).toList();
-        Map<Long, Long> confirmedRequestsMap = requestClient.getConfirmedRequestsByEventIds(eventIds);
-        Map<Long, Long> viewsMap = viewRepository.countsByEventIds(eventIds)
-                .stream()
-                .collect(Collectors.toMap(
-                        r -> (Long) r[0],
-                        r -> (Long) r[1]
-                ));
 
         return events.stream()
-                .map(e -> EventMapper.toEventShortDto(e, userClient.findByIdShort(e.getInitiatorId()), confirmedRequestsMap.get(e.getId()), viewsMap.get(e.getId())))
+                .map(e -> EventMapper.toEventShortDto(e, 0d, userClient.findById(e.getInitiatorId())))
                 .toList();
     }
 
@@ -145,8 +136,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
 
         eventRepository.save(event);
         Long confirmedRequests = requestClient.countByEventIdAndStatus(eventId);
-        Long views = viewRepository.countByEventId(eventId);
-        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, views);
+        return EventMapper.toEventFullDto(event, userClient.findByIdShort(event.getInitiatorId()), confirmedRequests, 0d);
     }
 
 

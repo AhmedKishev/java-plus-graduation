@@ -1,5 +1,7 @@
 package ru.practicum.client;
 
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,5 +28,10 @@ public interface UserClient {
 
     @GetMapping("/admin/user/short/list")
     public Map<Long, UserShortDto> findAllByIdsShort(@RequestParam List<Long> ids);
+
+    @GetMapping("admin/user")
+    List<UserDto> getAllUsers(@RequestParam(defaultValue = "") List<Long> ids,
+                              @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                              @Positive @RequestParam(defaultValue = "10") Integer size);
 
 }

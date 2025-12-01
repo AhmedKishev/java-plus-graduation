@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EventAdminParams;
@@ -33,14 +34,18 @@ public class EventAdminController {
 
     EventAdminService eventAdminService;
 
+    private final String DATE_TIME_FORMATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
     // Поиск событий
     @GetMapping
     Collection<EventFullDto> getAllEventsByParams(
             @RequestParam(required = false) List<Long> users,
             @RequestParam(required = false) List<State> states,
             @RequestParam(required = false) List<Long> categories,
-            @RequestParam(required = false) @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-            @RequestParam(required = false) @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = DATE_TIME_FORMATE_PATTERN) LocalDateTime rangeStart,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = DATE_TIME_FORMATE_PATTERN) LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "0") @PositiveOrZero Long from,
             @RequestParam(defaultValue = "10") @Positive Long size
     ) {

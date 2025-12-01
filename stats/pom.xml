@@ -21,9 +21,11 @@
     </properties>
 
     <modules>
-        <module>stat-common</module>
         <module>stat-client</module>
-        <module>stats-server</module>
+        <module>collector</module>
+        <module>serialization</module>
+        <module>aggregator</module>
+        <module>analyzer</module>
     </modules>
 
 </project>

@@ -37,7 +37,7 @@ public class EventMapper {
     public static EventFullDto toEventFullDto(
             Event event,
             UserShortDto byId, Long confirmedRequests,
-            Long views
+            Double rating
     ) {
         if (confirmedRequests == null) confirmedRequests = 0L;
         return EventFullDto.builder()
@@ -56,26 +56,24 @@ public class EventMapper {
                 .publishedOn(event.getPublishedOn())
                 .createdOn(event.getCreatedOn())
                 .confirmedRequests(confirmedRequests)
-                .views(views)
+                .rating(rating)
                 .build();
     }
 
-    public static EventShortDto toEventShortDto(
-            Event event,
-            UserShortDto byIdShort, Long confirmedRequests,
-            Long views
-    ) {
-        if (confirmedRequests == null) confirmedRequests = 0L;
+    public static EventShortDto toEventShortDto(Event event, Double rating, UserDto userDto) {
         return EventShortDto.builder()
-                .id(event.getId())
-                .initiator(byIdShort)
-                .category(CategoryMapper.toCategoryDto(event.getCategory()))
-                .title(event.getTitle())
                 .annotation(event.getAnnotation())
-                .paid(event.getPaid())
+                .category(CategoryMapper.toCategoryDto(event.getCategory()))
+                .confirmedRequests(event.getConfirmedRequests())
                 .eventDate(event.getEventDate())
-                .confirmedRequests(confirmedRequests)
-                .views(views)
+                .id(event.getId())
+                .initiator(UserShortDto.builder()
+                        .id(userDto.getId())
+                        .name(userDto.getName())
+                        .build())
+                .paid(event.getPaid())
+                .title(event.getTitle())
+                .rating(rating)
                 .build();
     }
 
