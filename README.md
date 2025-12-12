@@ -15,5 +15,6 @@
   <img width="100" height="100" alt="Docker" src="https://raw.githubusercontent.com/devicons/devicon/54cfe13ac10eaa1ef817a343ab0a9437eb3c2e08/icons/swagger/swagger-original.svg" />
 </p>
 
-
+# Модуль infa 
+Данный модуль содержит всю инфраструктуру приложения, включая входной шлюз ('Gateway') 
 
